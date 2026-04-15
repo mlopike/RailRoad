@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заявки - Админ-панель</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🚂 Железнодорожная касса</h1>
+            <nav>
+                <span sec:authentication="name"></span>
+                <a th:href="@{/admin}">Главная</a>
+                <a th:href="@{/admin/trains}">Поезда</a>
+                <a th:href="@{/admin/stations}">Станции</a>
+                <a th:href="@{/admin/users}">Пользователи</a>
+                <a th:href="@{/admin/bookings}">Заявки</a>
+                <a th:href="@{/profile}">Профиль</a>
+                <form th:action="@{/auth/logout}" method="post" style="display:inline;">
+                    <button type="submit" class="btn-logout">Выход</button>
+                </form>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="card">
+            <h2>Все заявки пассажиров</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Пассажир</th>
+                        <th>Email</th>
+                        <th>Откуда</th>
+                        <th>Куда</th>
+                        <th>Дата поездки</th>
+                        <th>Поезд</th>
+                        <th>Статус</th>
+                        <th>Цена</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="booking : ${bookings}">
+                        <td th:text="${booking.id}">1</td>
+                        <td th:text="${booking.passengerName}">Иванов И.И.</td>
+                        <td th:text="${booking.email}">ivan@example.com</td>
+                        <td th:text="${booking.fromStation.name}">Москва</td>
+                        <td th:text="${booking.toStation.name}">Санкт-Петербург</td>
+                        <td th:text="${#temporals.format(booking.travelDateTime, 'dd.MM.yyyy HH:mm')}">01.04.2026 10:00</td>
+                        <td th:text="${booking.selectedTrain != null} ? ${booking.selectedTrain.trainNumber} : '-'">001А</td>
+                        <td>
+                            <span class="badge" 
+                                  th:classappend="${booking.status.name() == 'PENDING'} ? 'badge-pending' : 
+                                                   (${booking.status.name() == 'TRAIN_SELECTED'} ? 'badge-train-selected' : 
+                                                   (${booking.status.name() == 'PAID'} ? 'badge-paid' : 'badge-cancelled'))"
+                                  th:text="${booking.status.name() == 'PENDING'} ? 'Ожидает' : 
+                                          (${booking.status.name() == 'TRAIN_SELECTED'} ? 'Поезд выбран' : 
+                                          (${booking.status.name() == 'PAID'} ? 'Оплачено' : 'Отменено'))">
+                                Ожидает
+                            </span>
+                        </td>
+                        <td th:text="${booking.totalPrice != null} ? ${booking.totalPrice} : '-'">1500</td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(bookings)}">
+                        <td colspan="9" style="text-align:center;">Заявок пока нет</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Система железнодорожная касса</p>
+    </footer>
+</body>
+</html>

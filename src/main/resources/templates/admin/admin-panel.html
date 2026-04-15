@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель - Железнодорожная касса</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🚂 Железнодорожная касса</h1>
+            <nav>
+                <span sec:authentication="name"></span>
+                <a th:href="@{/admin}">Главная</a>
+                <a th:href="@{/admin/trains}">Поезда</a>
+                <a th:href="@{/admin/stations}">Станции</a>
+                <a th:href="@{/admin/users}">Пользователи</a>
+                <a th:href="@{/admin/bookings}">Заявки</a>
+                <a th:href="@{/profile}">Профиль</a>
+                <form th:action="@{/auth/logout}" method="post" style="display:inline;">
+                    <button type="submit" class="btn-logout">Выход</button>
+                </form>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+        <div class="card">
+            <h2>Панель администратора</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Поезда</h3>
+                    <p>Всего поездов: <strong th:text="${#lists.size(trains)}">0</strong></p>
+                    <a th:href="@{/admin/trains}" class="btn btn-primary">Управление поездами</a>
+                </div>
+                <div class="card">
+                    <h3>Станции</h3>
+                    <p>Всего станций: <strong th:text="${#lists.size(stations)}">0</strong></p>
+                    <a th:href="@{/admin/stations}" class="btn btn-primary">Управление станциями</a>
+                </div>
+                <div class="card">
+                    <h3>Заявки пассажиров</h3>
+                    <p>Всего заявок: <strong th:text="${#lists.size(bookings)}">0</strong></p>
+                    <a th:href="@{/admin/bookings}" class="btn btn-primary">Просмотр заявок</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Система железнодорожная касса</p>
+    </footer>
+</body>
+</html>

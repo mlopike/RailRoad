@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поезд №<span th:text="${train.trainNumber}"></span> - Админ-панель</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🚂 Железнодорожная касса</h1>
+            <nav>
+                <span sec:authentication="name"></span>
+                <a th:href="@{/admin}">Главная</a>
+                <a th:href="@{/admin/trains}">Поезда</a>
+                <a th:href="@{/admin/stations}">Станции</a>
+                <a th:href="@{/admin/users}">Пользователи</a>
+                <a th:href="@{/admin/bookings}">Заявки</a>
+                <a th:href="@{/profile}">Профиль</a>
+                <form th:action="@{/auth/logout}" method="post" style="display:inline;">
+                    <button type="submit" class="btn-logout">Выход</button>
+                </form>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+        <div class="card">
+            <h2>Поезд №<span th:text="${train.trainNumber}"></span></h2>
+            
+            <h3>Маршрут поезда</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Порядок</th>
+                        <th>Станция</th>
+                        <th>Прибытие</th>
+                        <th>Отправление</th>
+                        <th>Цена</th>
+                        <th>Конечная</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="rs : ${routeStations}">
+                        <td th:text="${rs.stopOrder}">1</td>
+                        <td th:text="${rs.station.name}">Москва</td>
+                        <td th:text="${rs.arrivalTime}">2026-04-01 10:00</td>
+                        <td th:text="${rs.departureTime}">2026-04-01 10:05</td>
+                        <td th:text="${rs.price}">1000</td>
+                        <td th:text="${rs.final} ? 'Да' : 'Нет'">Нет</td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(routeStations)}">
+                        <td colspan="6" style="text-align:center;">Маршрут не задан</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin-top: 30px;">Добавить станцию в маршрут</h3>
+            <form th:action="@{/admin/trains/{id}/route(id=${train.id})}" method="post">
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="stationId">Станция:</label>
+                        <select id="stationId" name="stationId" required>
+                            <option value="">Выберите станцию</option>
+                            <option th:each="station : ${stations}" 
+                                    th:value="${station.id}" 
+                                    th:text="${station.name}">Москва</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="stopOrder">Порядок остановки:</label>
+                        <input type="number" id="stopOrder" name="stopOrder" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="arrivalTime">Время прибытия:</label>
+                        <input type="datetime-local" id="arrivalTime" name="arrivalTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="departureTime">Время отправления:</label>
+                        <input type="datetime-local" id="departureTime" name="departureTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Цена (руб):</label>
+                        <input type="number" id="price" name="price" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="isFinal" name="isFinal"> Конечная станция
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">Добавить станцию</button>
+            </form>
+        </div>
+
+        <a th:href="@{/admin/trains}" class="btn btn-secondary">Назад к списку</a>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Система железнодорожная касса</p>
+    </footer>
+</body>
+</html>
