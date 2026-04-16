@@ -88,8 +88,16 @@ public class AdminController {
         try {
             LocalDateTime arrival = LocalDateTime.parse(arrivalTime);
             LocalDateTime departure = LocalDateTime.parse(departureTime);
+            
+            // Дополнительная валидация в контроллере
+            if (departure.isBefore(arrival)) {
+                throw new RuntimeException("Время отправления не может быть раньше времени прибытия");
+            }
+            
             trainService.addRouteStation(id, stationId, stopOrder, arrival, departure, price, isFinal);
             redirectAttributes.addFlashAttribute("success", "Станция добавлена в маршрут");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("error", "Некорректный формат даты/времени. Используйте формат YYYY-MM-DDTHH:MM");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Ошибка: " + e.getMessage());
         }

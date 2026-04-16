@@ -74,6 +74,34 @@ public class TrainService {
         Station station = stationRepository.findById(stationId)
                 .orElseThrow(() -> new RuntimeException("Станция не найдена"));
 
+        // Валидация: время отправления не может быть раньше времени прибытия
+        if (arrivalTime != null && departureTime != null && departureTime.isBefore(arrivalTime)) {
+            throw new RuntimeException("Время отправления не может быть раньше времени прибытия");
+        }
+
+        // Валидация: проверяем существующие остановки этого поезда
+        List<RouteStation> existingRouteStations = routeStationRepository.findByTrainOrderByStopOrderAsc(train);
+        
+        // Проверка уникальности порядка остановки
+        for (RouteStation rs : existingRouteStations) {
+            if (rs.getStopOrder().equals(stopOrder)) {
+                throw new RuntimeException("Остановка с таким порядковым номером уже существует");
+            }
+        }
+
+        // Проверка: если это не первая остановка, время прибытия должно быть после времени отправления предыдущей
+        if (!existingRouteStations.isEmpty()) {
+            RouteStation lastStation = existingRouteStations.get(existingRouteStations.size() - 1);
+            
+            if (stopOrder > lastStation.getStopOrder()) {
+                // Добавляем в конец маршрута
+                if (lastStation.getDepartureTime() != null && arrivalTime != null && 
+                    arrivalTime.isBefore(lastStation.getDepartureTime())) {
+                    throw new RuntimeException("Время прибытия на следующую станцию не может быть раньше времени отправления с предыдущей");
+                }
+            }
+        }
+
         RouteStation routeStation = new RouteStation();
         routeStation.setTrain(train);
         routeStation.setStation(station);
