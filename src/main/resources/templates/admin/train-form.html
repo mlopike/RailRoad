@@ -29,6 +29,7 @@
     <main class="container">
         <div class="card">
             <h2>Добавить новый поезд</h2>
+            <div th:if="${error}" class="error-message" th:text="${error}"></div>
             <form th:action="@{/admin/trains}" th:object="${train}" method="post">
                 <div class="form-group">
                     <label for="trainNumber">Номер поезда:</label>
