@@ -74,9 +74,30 @@ public class TrainService {
         Station station = stationRepository.findById(stationId)
                 .orElseThrow(() -> new RuntimeException("Станция не найдена"));
 
-        // Валидация: время отправления не может быть раньше времени прибытия
-        if (arrivalTime != null && departureTime != null && departureTime.isBefore(arrivalTime)) {
-            throw new RuntimeException("Время отправления не может быть раньше времени прибытия");
+        // Валидация: порядок остановки должен быть положительным
+        if (stopOrder == null || stopOrder <= 0) {
+            throw new RuntimeException("Порядок остановки должен быть положительным числом");
+        }
+
+        // Валидация: цена не может быть отрицательной
+        if (price == null || price.compareTo(BigDecimal.ZERO) < 0) {
+            throw new RuntimeException("Цена не может быть отрицательной");
+        }
+
+        // Валидация: время отправления не может быть раньше или равно времени прибытия
+        if (arrivalTime != null && departureTime != null) {
+            if (departureTime.isBefore(arrivalTime) || departureTime.isEqual(arrivalTime)) {
+                throw new RuntimeException("Время отправления должно быть строго после времени прибытия");
+            }
+        }
+
+        // Валидация: время не может быть в прошлом
+        LocalDateTime now = LocalDateTime.now();
+        if (arrivalTime != null && arrivalTime.isBefore(now)) {
+            throw new RuntimeException("Время прибытия не может быть в прошлом");
+        }
+        if (departureTime != null && departureTime.isBefore(now)) {
+            throw new RuntimeException("Время отправления не может быть в прошлом");
         }
 
         // Валидация: проверяем существующие остановки этого поезда

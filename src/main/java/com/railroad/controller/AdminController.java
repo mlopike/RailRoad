@@ -86,17 +86,33 @@ public class AdminController {
                                   @RequestParam(defaultValue = "false") boolean isFinal,
                                   RedirectAttributes redirectAttributes) {
         try {
+            // Валидация порядка остановки
+            if (stopOrder == null || stopOrder <= 0) {
+                throw new RuntimeException("Порядок остановки должен быть положительным числом");
+            }
+            
+            // Валидация цены
+            if (price == null || price.compareTo(BigDecimal.ZERO) < 0) {
+                throw new RuntimeException("Цена не может быть отрицательной");
+            }
+            
             LocalDateTime arrival = LocalDateTime.parse(arrivalTime);
             LocalDateTime departure = LocalDateTime.parse(departureTime);
             
-            // Дополнительная валидация в контроллере
-            if (departure.isBefore(arrival)) {
-                throw new RuntimeException("Время отправления не может быть раньше времени прибытия");
+            // Валидация: время отправления не может быть раньше или равно времени прибытия
+            if (departure.isBefore(arrival) || departure.isEqual(arrival)) {
+                throw new RuntimeException("Время отправления должно быть строго после времени прибытия");
+            }
+            
+            // Валидация: время не может быть в прошлом
+            LocalDateTime now = LocalDateTime.now();
+            if (arrival.isBefore(now)) {
+                throw new RuntimeException("Время прибытия не может быть в прошлом");
             }
             
             trainService.addRouteStation(id, stationId, stopOrder, arrival, departure, price, isFinal);
             redirectAttributes.addFlashAttribute("success", "Станция добавлена в маршрут");
-        } catch (IllegalArgumentException e) {
+        } catch (java.time.format.DateTimeParseException e) {
             redirectAttributes.addFlashAttribute("error", "Некорректный формат даты/времени. Используйте формат YYYY-MM-DDTHH:MM");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Ошибка: " + e.getMessage());
