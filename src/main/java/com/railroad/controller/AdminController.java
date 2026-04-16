@@ -50,7 +50,8 @@ public class AdminController {
     @PostMapping("/trains")
     public String createTrain(@Valid @ModelAttribute("train") Train train,
                               BindingResult result,
-                              RedirectAttributes redirectAttributes) {
+                              RedirectAttributes redirectAttributes,
+                              Model model) {
         if (result.hasErrors()) {
             return "admin/train-form";
         }
@@ -59,8 +60,8 @@ public class AdminController {
             trainService.createTrain(train.getTrainNumber());
             redirectAttributes.addFlashAttribute("success", "Поезд создан успешно!");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Поезд с таким номером уже существует");
-            return "redirect:/admin/trains/new";
+            model.addAttribute("error", "Поезд с таким номером уже существует");
+            return "admin/train-form";
         }
 
         return "redirect:/admin/trains";

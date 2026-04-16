@@ -399,6 +399,17 @@ table tbody tr:last-child td {
     animation: slideDown 0.3s ease;
 }
 
+.error-message {
+    background: var(--danger-light);
+    color: #991b1b;
+    border: 1px solid var(--danger-color);
+    padding: 16px 20px;
+    border-radius: var(--radius);
+    margin-bottom: 24px;
+    font-weight: 500;
+    animation: slideDown 0.3s ease;
+}
+
 @keyframes slideDown {
     from {
         opacity: 0;
