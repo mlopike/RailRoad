@@ -198,4 +198,8 @@ public class BookingService {
     public List<Booking> getAllBookings() {
         return bookingRepository.findAll();
     }
+
+    public Ticket getTicketById(Long id) {
+        return ticketRepository.findById(id).orElse(null);
+    }
 }

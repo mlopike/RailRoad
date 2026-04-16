@@ -91,7 +91,7 @@
 
             <!-- Билет -->
             <div th:if="${booking.status.name() == 'PAID'}" style="margin-top: 30px;">
-                <h3 style="color: #28a745;">✓ Билет оплачен</h3>
+                <h3 style="color: #28a745;">✓ Билет оплачен и сгенерирован</h3>
                 <div class="card" style="background: #d4edda; border: 2px solid #28a745;">
                     <p><strong>Номер поезда:</strong> <span th:text="${booking.selectedTrain.trainNumber}">001А</span></p>
                     <p><strong>Маршрут:</strong>
@@ -106,6 +106,11 @@
                              th:text="${booking.tickets[0].seatNumber}">5-12</span>
                        <span th:if="${booking.tickets == null or booking.tickets.isEmpty() or booking.tickets[0].seatNumber == null}">Будет назначено</span>
                     </p>
+                    <div style="margin-top: 20px;">
+                        <a th:if="${booking.tickets != null and !booking.tickets.isEmpty()}" 
+                           th:href="@{/tickets/{id}(id=${booking.tickets[0].id})}" 
+                           class="btn btn-success">🎫 Просмотреть билет</a>
+                    </div>
                 </div>
             </div>
 
