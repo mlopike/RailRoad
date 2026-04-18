@@ -23,5 +23,6 @@
 /workspace/src/main/java/com/railroad/entity/User.java
 /workspace/src/main/java/com/railroad/entity/Booking.java
 /workspace/src/main/java/com/railroad/service/TrainService.java
+/workspace/src/main/java/com/railroad/util/QRCodeGenerator.java
 /workspace/src/main/java/com/railroad/repository/TicketRepository.java
 /workspace/src/main/java/com/railroad/repository/UserRepository.java

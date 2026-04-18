@@ -26,24 +26,31 @@
                 <div class="form-group">
                     <label for="username">Имя пользователя:</label>
                     <input type="text" id="username" th:field="*{username}" 
-                           placeholder="Придумайте имя пользователя" required>
+                           placeholder="Придумайте имя пользователя" 
+                           autocomplete="username" required>
                     <small style="color: #666;">От 3 до 50 символов</small>
                 </div>
                 <div class="form-group">
                     <label for="email">Email:</label>
                     <input type="email" id="email" th:field="*{email}" 
-                           placeholder="example@mail.ru" required>
+                           placeholder="example@mail.ru" 
+                           autocomplete="email" required>
                 </div>
                 <div class="form-group">
                     <label for="phone">Номер телефона:</label>
                     <input type="tel" id="phone" th:field="*{phone}" 
-                           placeholder="+375291234567" required>
+                           placeholder="+375291234567" 
+                           autocomplete="tel" 
+                           pattern="\+375[0-9]{9}"
+                           title="Номер должен быть в формате +375XXXXXXXXX"
+                           required>
                     <small style="color: #666;">Формат: +375XXXXXXXXX (белорусский формат)</small>
                 </div>
                 <div class="form-group">
                     <label for="password">Пароль:</label>
                     <input type="password" id="password" th:field="*{password}" 
-                           placeholder="Придумайте пароль" required>
+                           placeholder="Придумайте пароль" 
+                           autocomplete="new-password" required>
                     <small style="color: #666;">Не менее 6 символов</small>
                 </div>
                 <button type="submit" class="btn btn-success" style="width: 100%;">Зарегистрироваться</button>

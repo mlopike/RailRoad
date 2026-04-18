@@ -3,6 +3,7 @@ package com.railroad.controller;
 import com.railroad.entity.Ticket;
 import com.railroad.service.BookingService;
 import com.railroad.service.UserService;
+import com.railroad.util.QRCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -58,6 +59,12 @@ public class TicketController {
 
         model.addAttribute("ticket", ticket);
         model.addAttribute("booking", ticket.getBooking());
+        
+        // Генерируем QR-код для билета
+        if (ticket.getTicketCode() != null) {
+            String qrCodeBase64 = QRCodeGenerator.generateQRCodeImage(ticket.getTicketCode());
+            model.addAttribute("qrCodeBase64", qrCodeBase64);
+        }
 
         return "tickets/ticket-view";
     }
@@ -90,6 +97,12 @@ public class TicketController {
 
         model.addAttribute("ticket", ticket);
         model.addAttribute("booking", ticket.getBooking());
+        
+        // Генерируем QR-код для билета
+        if (ticket.getTicketCode() != null) {
+            String qrCodeBase64 = QRCodeGenerator.generateQRCodeImage(ticket.getTicketCode());
+            model.addAttribute("qrCodeBase64", qrCodeBase64);
+        }
 
         return "tickets/ticket-print";
     }

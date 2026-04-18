@@ -168,6 +168,7 @@ public class BookingService {
         ticket.setPrice(booking.getTotalPrice());
         ticket.setStatus(Ticket.TicketStatus.PAID);
         ticket.setSeatNumber(generateSeatNumber());
+        ticket.setTicketCode(generateTicketCode(booking));
 
         ticketRepository.save(ticket);
         
@@ -185,6 +186,17 @@ public class BookingService {
         int car = (int) (Math.random() * 10) + 1;
         int seat = (int) (Math.random() * 54) + 1;
         return car + "-" + seat;
+    }
+
+    /**
+     * Генерирует уникальный код билета в формате: TICKET-YYYYMMDD-HHMMSS-RANDOM
+     * Этот код будет использоваться для создания QR-кода
+     */
+    private String generateTicketCode(Booking booking) {
+        String timestamp = java.time.LocalDateTime.now()
+                .format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        String randomPart = String.format("%04d", (int)(Math.random() * 10000));
+        return "TICKET-" + timestamp + "-" + randomPart;
     }
 
     public Booking cancelBooking(Long bookingId) {
