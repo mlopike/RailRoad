@@ -57,6 +57,10 @@ public class UserService implements UserDetailsService {
     }
 
     public User registerUser(String username, String password, String email) {
+        return registerUserWithPhone(username, password, email, null);
+    }
+
+    public User registerUserWithPhone(String username, String password, String email, String phone) {
         if (existsByUsername(username)) {
             throw new RuntimeException("Пользователь с таким именем уже существует");
         }
@@ -68,6 +72,7 @@ public class UserService implements UserDetailsService {
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
         user.setEmail(email);
+        user.setPhone(phone != null ? phone : "");
         user.setRole(Role.USER);
         user.setEnabled(true);
 

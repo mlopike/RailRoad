@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "users")
@@ -28,6 +29,10 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @NotBlank(message = "Номер телефона обязателен")
+    @Column(nullable = false)
+    private String phone;
+
     @Column(nullable = false)
     private boolean enabled = true;
 
@@ -42,10 +47,11 @@ public class User {
 
     public User() {}
 
-    public User(String username, String password, String email, Role role) {
+    public User(String username, String password, String email, String phone, Role role) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.phone = phone;
         this.role = role;
     }
 
@@ -79,6 +85,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public boolean isEnabled() {
