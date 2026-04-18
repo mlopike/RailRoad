@@ -1,0 +1,588 @@
+/* ========================================
+   Железнодорожная касса - Современные стили
+   ======================================== */
+
+/* --- Шрифты и переменные --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* Основная палитра */
+    --primary-color: #2563eb;
+    --primary-hover: #1d4ed8;
+    --primary-light: #dbeafe;
+    
+    --secondary-color: #64748b;
+    --secondary-hover: #475569;
+    
+    /* Статусы */
+    --success-color: #10b981;
+    --success-hover: #059669;
+    --success-light: #d1fae5;
+    
+    --danger-color: #ef4444;
+    --danger-hover: #dc2626;
+    --danger-light: #fee2e2;
+    
+    --warning-color: #f59e0b;
+    --warning-light: #fef3c7;
+    
+    --info-color: #3b82f6;
+    --info-light: #dbeafe;
+    
+    /* Нейтральные цвета */
+    --background: #f8fafc;
+    --surface: #ffffff;
+    --surface-hover: #f1f5f9;
+    
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    
+    --border-color: #e2e8f0;
+    --border-focus: #2563eb;
+    
+    /* Тени */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    
+    /* Радиусы */
+    --radius-sm: 6px;
+    --radius: 10px;
+    --radius-lg: 16px;
+    --radius-full: 9999px;
+    
+    /* Переходы */
+    --transition-fast: 150ms ease;
+    --transition: 200ms ease;
+    --transition-slow: 300ms ease;
+}
+
+/* --- Базовые стили --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* --- Контейнер --- */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+}
+
+/* --- Хедер --- */
+header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+}
+
+header h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary-color), #7c3aed);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+header nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+header nav a,
+header nav button {
+    color: var(--text-secondary) !important;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+header nav a:hover,
+header nav button:hover {
+    color: var(--primary-color) !important;
+    background: var(--primary-light);
+}
+
+header nav .btn-logout {
+    color: var(--text-secondary) !important;
+    background: transparent;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+header nav .btn-logout:hover {
+    color: var(--danger-color) !important;
+    background: var(--danger-light);
+}
+
+header nav span {
+    color: var(--text-primary);
+    font-weight: 600;
+    padding: 8px 12px;
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+}
+
+/* --- Карточки --- */
+.card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-color);
+    transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.15);
+}
+
+.card h2 {
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--primary-light);
+}
+
+.card h3 {
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 24px 0 16px 0;
+}
+
+/* --- Кнопки --- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all var(--transition);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left var(--transition-slow);
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    color: white;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--primary-hover), #1e40af);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--success-color), var(--success-hover));
+    color: white;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, var(--success-hover), #047857);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--danger-color), var(--danger-hover));
+    color: white;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, var(--danger-hover), #b91c1c);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, var(--secondary-color), var(--secondary-hover));
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, var(--secondary-hover), #334155);
+}
+
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 0.875rem;
+}
+
+.btn-lg {
+    padding: 16px 32px;
+    font-size: 1.1rem;
+}
+
+.actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+/* --- Формы --- */
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--text-primary);
+    background: var(--surface);
+    transition: all var(--transition-fast);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+.form-group input:hover,
+.form-group select:hover {
+    border-color: var(--secondary-color);
+}
+
+.form-group small {
+    display: block;
+    margin-top: 6px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* --- Таблицы --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: var(--surface);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+table thead {
+    background: linear-gradient(135deg, var(--primary-color), #7c3aed);
+}
+
+table th {
+    padding: 16px;
+    text-align: left;
+    font-weight: 600;
+    color: white;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+table td {
+    padding: 16px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+table tbody tr {
+    transition: background var(--transition-fast);
+}
+
+table tbody tr:hover {
+    background: var(--surface-hover);
+}
+
+table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* --- Уведомления --- */
+.alert {
+    padding: 16px 20px;
+    border-radius: var(--radius);
+    margin-bottom: 24px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: slideDown 0.3s ease;
+}
+
+.error-message {
+    background: var(--danger-light);
+    color: #991b1b;
+    border: 1px solid var(--danger-color);
+    padding: 16px 20px;
+    border-radius: var(--radius);
+    margin-bottom: 24px;
+    font-weight: 500;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.alert-success {
+    background: var(--success-light);
+    color: #065f46;
+    border: 1px solid var(--success-color);
+}
+
+.alert-error {
+    background: var(--danger-light);
+    color: #991b1b;
+    border: 1px solid var(--danger-color);
+}
+
+.alert-warning {
+    background: var(--warning-light);
+    color: #92400e;
+    border: 1px solid var(--warning-color);
+}
+
+.alert-info {
+    background: var(--info-light);
+    color: #1e40af;
+    border: 1px solid var(--info-color);
+}
+
+/* --- Бейджи --- */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-pending {
+    background: var(--warning-light);
+    color: #92400e;
+}
+
+.badge-train-selected {
+    background: var(--info-light);
+    color: #1e40af;
+}
+
+.badge-paid {
+    background: var(--success-light);
+    color: #065f46;
+}
+
+.badge-cancelled {
+    background: var(--danger-light);
+    color: #991b1b;
+}
+
+/* --- Сетка --- */
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+@media (max-width: 768px) {
+    .grid-2,
+    .grid-3 {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+}
+
+/* --- Футер --- */
+footer {
+    text-align: center;
+    padding: 30px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    color: rgba(255, 255, 255, 0.9);
+    margin-top: 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+footer p {
+    font-size: 0.9rem;
+}
+
+/* --- Адаптивность --- */
+@media (max-width: 768px) {
+    header .container {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    header nav {
+        justify-content: center;
+    }
+    
+    .card {
+        padding: 20px;
+    }
+    
+    .actions {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+    
+    table {
+        font-size: 0.875rem;
+    }
+    
+    table th,
+    table td {
+        padding: 12px 10px;
+    }
+}
+
+/* --- Анимации --- */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: slideUp 0.4s ease;
+}
+
+/* --- Скроллбар --- */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--secondary-color);
+    border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-hover);
+}

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход - Железнодорожная касса</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🚂 Железнодорожная касса</h1>
+            <nav>
+                <a th:href="@{/auth/register}">Регистрация</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="card" style="max-width: 400px; margin: 50px auto;">
+            <h2>Вход в систему</h2>
+            
+            <div th:if="${param.success}" class="alert alert-success">
+                Регистрация успешна! Теперь вы можете войти.
+            </div>
+            
+            <div th:if="${param.logout}" class="alert alert-success">
+                Вы успешно вышли из системы.
+            </div>
+            
+            <div th:if="${param.error}" class="alert alert-error">
+                Неверное имя пользователя или пароль.
+            </div>
+            
+            <form th:action="@{/auth/login}" method="post">
+                <div class="form-group">
+                    <label for="username">Имя пользователя:</label>
+                    <input type="text" id="username" name="username" 
+                           placeholder="Введите имя пользователя" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="password">Пароль:</label>
+                    <input type="password" id="password" name="password" 
+                           placeholder="Введите пароль" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Войти</button>
+            </form>
+            
+            <div style="margin-top: 20px; text-align: center;">
+                <p>Нет аккаунта? <a th:href="@{/auth/register}">Зарегистрироваться</a></p>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 5px;">
+                <p style="font-size: 0.9rem; color: #666;"><strong>Тестовые учётные данные:</strong></p>
+                <p style="font-size: 0.85rem; color: #666;">Администратор: admin / admin</p>
+                <p style="font-size: 0.85rem; color: #666;">Пассажир: user / user</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Система железнодорожная касса</p>
+    </footer>
+</body>
+</html>

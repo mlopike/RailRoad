@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль - Железнодорожная касса</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🚂 Железнодорожная касса</h1>
+            <nav>
+                <span sec:authentication="name"></span>
+                <a th:href="@{/passenger}">Поиск рейсов</a>
+                <a th:href="@{/passenger/bookings}">Мои заявки</a>
+                <a th:href="@{/profile}">Профиль</a>
+                <form th:action="@{/auth/logout}" method="post" style="display:inline;">
+                    <button type="submit" class="btn-logout">Выход</button>
+                </form>
+                <a th:href="@{/admin}" sec:authorize="hasRole('ADMIN')">Админ-панель</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+        <div class="card" style="max-width: 600px; margin: 50px auto;">
+            <h2>Профиль пользователя</h2>
+            
+            <form th:action="@{/profile/update}" method="post">
+                <div class="form-group">
+                    <label for="username">Имя пользователя:</label>
+                    <input type="text" id="username" th:value="${user.username}" disabled>
+                    <small style="color: #666;">Имя пользователя нельзя изменить</small>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" th:value="${user.email}" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Номер телефона:</label>
+                    <input type="tel" id="phone" name="phone" th:value="${user.phone}" 
+                           placeholder="+375291234567" required>
+                    <small style="color: #666;">Формат: +375XXXXXXXXX (белорусский формат)</small>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">Новый пароль:</label>
+                    <input type="password" id="newPassword" name="newPassword" 
+                           placeholder="Оставьте пустым, чтобы не менять">
+                    <small style="color: #666;">Не менее 6 символов</small>
+                </div>
+                <div class="form-group">
+                    <label>Роль:</label>
+                    <input type="text" th:value="${user.role.name() == 'ADMIN'} ? 'Администратор' : 'Пользователь'" disabled>
+                </div>
+                <button type="submit" class="btn btn-success" style="width: 100%;">Сохранить изменения</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Система железнодорожная касса</p>
+    </footer>
+</body>
+</html>

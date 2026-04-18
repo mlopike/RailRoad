@@ -22,13 +22,16 @@ public class UserRegistrationDto {
     @Pattern(regexp = "^\\+?[0-9]{10,15}$", message = "Номер телефона должен содержать от 10 до 15 цифр")
     private String phone;
 
-    @NotBlank(message = "Роль обязательна")
-    private String role;
+    // Роль по умолчанию для регистрации
+    private String role = "USER";
 
     public UserRegistrationDto() {
         // Устанавливаем номер телефона по умолчанию в белорусском формате
-        this.phone = "";
+        this.phone = "+375";
+        this.role = "USER";
     }
+
+    // Геттеры и сеттеры
 
     public String getUsername() {
         return username;
