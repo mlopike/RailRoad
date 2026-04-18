@@ -1,5 +1,6 @@
 package com.railroad.controller;
 
+import com.railroad.dto.UserRegistrationDto;
 import com.railroad.entity.User;
 import com.railroad.service.UserService;
 import jakarta.validation.Valid;
@@ -27,12 +28,12 @@ public class AuthController {
 
     @GetMapping("/register")
     public String registerPage(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("user", new UserRegistrationDto());
         return "auth/register";
     }
 
     @PostMapping("/register")
-    public String registerUser(@Valid @ModelAttribute("user") User user,
+    public String registerUser(@Valid @ModelAttribute("user") UserRegistrationDto userDto,
                                BindingResult result,
                                RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
@@ -40,7 +41,7 @@ public class AuthController {
         }
 
         try {
-            userService.registerUser(user.getUsername(), user.getPassword(), user.getEmail());
+            userService.registerUserWithPhone(userDto.getUsername(), userDto.getPassword(), userDto.getEmail(), userDto.getPhone());
             redirectAttributes.addFlashAttribute("success", "Регистрация успешна! Теперь вы можете войти.");
             return "redirect:/auth/login";
         } catch (Exception e) {

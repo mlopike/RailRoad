@@ -2,6 +2,7 @@ package com.railroad.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class UserRegistrationDto {
@@ -17,6 +18,10 @@ public class UserRegistrationDto {
     @NotBlank(message = "Email обязателен")
     @Email(message = "Некорректный email")
     private String email;
+
+    @NotBlank(message = "Номер телефона обязателен")
+    @Pattern(regexp = "^\\+?[0-9]{10,15}$", message = "Номер телефона должен содержать от 10 до 15 цифр")
+    private String phone;
 
     @NotBlank(message = "Роль обязательна")
     private String role;
@@ -45,6 +50,14 @@ public class UserRegistrationDto {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getRole() {
