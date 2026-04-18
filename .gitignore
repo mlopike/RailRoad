@@ -1,1 +1,31 @@
-(src/main/java/com/railroad/dto/UserRegistrationDto.java)
+```
+# Compiled Java classes
+*.class
+
+# Maven build artifacts
+target/
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.local
+*.env.*
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+```

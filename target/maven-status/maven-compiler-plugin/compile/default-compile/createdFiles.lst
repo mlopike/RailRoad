@@ -16,6 +16,7 @@ com/railroad/controller/TrainTimeInfo.class
 com/railroad/entity/Train.class
 com/railroad/controller/AdminUserController.class
 com/railroad/service/UserService.class
+com/railroad/util/QRCodeGenerator.class
 com/railroad/controller/AuthController.class
 com/railroad/controller/TicketController.class
 com/railroad/repository/UserRepository.class

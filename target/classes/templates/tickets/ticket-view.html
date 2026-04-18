@@ -208,8 +208,18 @@
                    <span th:text="${#temporals.format(booking.travelDateTime, 'dd.MM.yyyy HH:mm')}">01.04.2026 16:00</span></p>
             </div>
 
-            <div class="qr-placeholder">
-                [QR CODE]
+            <div class="ticket-section" style="text-align: center; margin-bottom: 15px;">
+                <h3>🔐 QR-код билета</h3>
+                <div th:if="${qrCodeBase64 != null}" style="display: inline-block;">
+                    <img th:src="'data:image/png;base64,' + ${qrCodeBase64}" 
+                         alt="QR Code" 
+                         style="width: 150px; height: 150px;" />
+                    <p style="font-size: 0.8rem; color: #7f8c8d; margin-top: 5px;" 
+                       th:text="${ticket.ticketCode}">TICKET-...</p>
+                </div>
+                <div th:if="${qrCodeBase64 == null}" class="qr-placeholder">
+                    QR-код не сгенерирован
+                </div>
             </div>
 
             <div class="ticket-footer">
