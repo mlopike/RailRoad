@@ -41,9 +41,9 @@ public class AdminUserController {
         
         try {
             if ("ADMIN".equals(userDto.getRole())) {
-                userService.registerAdmin(userDto.getUsername(), userDto.getPassword(), userDto.getEmail());
+                userService.registerAdminWithPhone(userDto.getUsername(), userDto.getPassword(), userDto.getEmail(), userDto.getPhone());
             } else {
-                userService.registerUser(userDto.getUsername(), userDto.getPassword(), userDto.getEmail());
+                userService.registerUserWithPhone(userDto.getUsername(), userDto.getPassword(), userDto.getEmail(), userDto.getPhone());
             }
             redirectAttributes.addFlashAttribute("success", "Пользователь создан успешно!");
         } catch (Exception e) {

@@ -37,6 +37,7 @@ public class ProfileController {
 
     @PostMapping("/update")
     public String updateProfile(@RequestParam String email,
+                                @RequestParam String phone,
                                 @RequestParam(required = false) String newPassword,
                                 @AuthenticationPrincipal UserDetails userDetails,
                                 RedirectAttributes redirectAttributes) {
@@ -45,6 +46,7 @@ public class ProfileController {
                     .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
 
             user.setEmail(email);
+            user.setPhone(phone);
             if (newPassword != null && !newPassword.trim().isEmpty()) {
                 if (newPassword.length() < 6) {
                     throw new RuntimeException("Пароль должен быть не менее 6 символов");
