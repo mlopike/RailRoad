@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - Железнодорожная касса</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🚂 Железнодорожная касса</h1>
+            <nav>
+                <a th:href="@{/auth/login}">Вход</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="card" style="max-width: 500px; margin: 50px auto;">
+            <h2>Регистрация нового пользователя</h2>
+            
+            <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+            
+            <form th:action="@{/auth/register}" th:object="${user}" method="post">
+                <div class="form-group">
+                    <label for="username">Имя пользователя:</label>
+                    <input type="text" id="username" th:field="*{username}" 
+                           placeholder="Придумайте имя пользователя" required>
+                    <small style="color: #666;">От 3 до 50 символов</small>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" th:field="*{email}" 
+                           placeholder="example@mail.ru" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Номер телефона:</label>
+                    <input type="tel" id="phone" th:field="*{phone}" 
+                           placeholder="+375291234567" required>
+                    <small style="color: #666;">Формат: +375XXXXXXXXX (белорусский формат)</small>
+                </div>
+                <div class="form-group">
+                    <label for="password">Пароль:</label>
+                    <input type="password" id="password" th:field="*{password}" 
+                           placeholder="Придумайте пароль" required>
+                    <small style="color: #666;">Не менее 6 символов</small>
+                </div>
+                <button type="submit" class="btn btn-success" style="width: 100%;">Зарегистрироваться</button>
+            </form>
+            
+            <div style="margin-top: 20px; text-align: center;">
+                <p>Уже есть аккаунт? <a th:href="@{/auth/login}">Войти</a></p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Система железнодорожная касса</p>
+    </footer>
+</body>
+</html>

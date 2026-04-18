@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пользователи - Админ-панель</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🚂 Железнодорожная касса</h1>
+            <nav>
+                <span sec:authentication="name"></span>
+                <a th:href="@{/admin}">Главная</a>
+                <a th:href="@{/admin/trains}">Поезда</a>
+                <a th:href="@{/admin/stations}">Станции</a>
+                <a th:href="@{/admin/users}">Пользователи</a>
+                <a th:href="@{/admin/bookings}">Заявки</a>
+                <a th:href="@{/profile}">Профиль</a>
+                <form th:action="@{/auth/logout}" method="post" style="display:inline;">
+                    <button type="submit" class="btn-logout">Выход</button>
+                </form>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+        <div class="card">
+            <h2>Управление пользователями</h2>
+            <a th:href="@{/admin/users/new}" class="btn btn-primary">Добавить пользователя</a>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Имя пользователя</th>
+                        <th>Email</th>
+                        <th>Роль</th>
+                        <th>Статус</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="user : ${users}">
+                        <td th:text="${user.id}">1</td>
+                        <td th:text="${user.username}">admin</td>
+                        <td th:text="${user.email}">admin@railroad.ru</td>
+                        <td>
+                            <span class="badge" 
+                                  th:classappend="${user.role.name() == 'ADMIN'} ? 'badge-train-selected' : 'badge-pending'"
+                                  th:text="${user.role.name() == 'ADMIN'} ? 'Администратор' : 'Пользователь'">
+                                Пользователь
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge" 
+                                  th:classappend="${user.enabled} ? 'badge-paid' : 'badge-cancelled'"
+                                  th:text="${user.enabled} ? 'Активен' : 'Деактивирован'">
+                                Активен
+                            </span>
+                        </td>
+                        <td>
+                            <form th:if="${user.enabled}" 
+                                  th:action="@{/admin/users/disable/{id}(id=${user.id})}" 
+                                  method="post" style="display:inline;"
+                                  onsubmit="return confirm('Деактивировать пользователя?')">
+                                <button type="submit" class="btn btn-danger">Деактив.</button>
+                            </form>
+                            <form th:if="${!user.enabled}" 
+                                  th:action="@{/admin/users/enable/{id}(id=${user.id})}" 
+                                  method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-success">Актив.</button>
+                            </form>
+                            <form th:action="@{/admin/users/delete/{id}(id=${user.id})}" 
+                                  method="post" style="display:inline;"
+                                  onsubmit="return confirm('Удалить пользователя?')">
+                                <button type="submit" class="btn btn-danger">Удалить</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(users)}">
+                        <td colspan="6" style="text-align:center;">Пользователей пока нет</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Система железнодорожная касса</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Билет №<span th:text="${ticket.id}"></span> - Железнодорожная касса</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .ticket-container {
+            max-width: 800px;
+            margin: 20px auto;
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .ticket-header {
+            text-align: center;
+            border-bottom: 2px dashed #333;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        .ticket-header h2 {
+            color: #2c3e50;
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        .ticket-header p {
+            color: #7f8c8d;
+            margin: 5px 0;
+        }
+        .ticket-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .ticket-section {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .ticket-section h3 {
+            color: #34495e;
+            margin-top: 0;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #ecf0f1;
+            padding-bottom: 8px;
+        }
+        .ticket-section p {
+            margin: 8px 0;
+            color: #2c3e50;
+        }
+        .ticket-section strong {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        .route-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #3498db;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .route-station {
+            text-align: center;
+        }
+        .route-station .station-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+        .route-station .station-time {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        .route-arrow {
+            font-size: 2rem;
+        }
+        .ticket-footer {
+            text-align: center;
+            border-top: 2px dashed #333;
+            padding-top: 15px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        .qr-placeholder {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border: 2px solid #333;
+            margin: 10px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            background: #27ae60;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .ticket-container, .ticket-container * {
+                visibility: visible;
+            }
+            .ticket-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                border: 2px solid #000;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="no-print">
+        <div class="container">
+            <h1>🚂 Железнодорожная касса</h1>
+            <nav>
+                <span sec:authentication="name"></span>
+                <a th:href="@{/passenger}">Поиск рейсов</a>
+                <a th:href="@{/passenger/bookings}">Мои заявки</a>
+                <a th:href="@{/profile}">Профиль</a>
+                <form th:action="@{/auth/logout}" method="post" style="display:inline;">
+                    <button type="submit" class="btn-logout">Выход</button>
+                </form>
+                <a th:href="@{/admin}" sec:authorize="hasRole('ADMIN')">Админ-панель</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="no-print" style="margin-bottom: 20px;">
+            <a th:href="@{/passenger/bookings/{id}(id=${booking.id})}" class="btn btn-secondary">← Назад к заявке</a>
+            <button onclick="window.print()" class="btn btn-primary" style="margin-left: 10px;">🖨️ Печать билета</button>
+        </div>
+
+        <div class="ticket-container">
+            <div class="ticket-header">
+                <h2>🎫 ПРОЕЗДНОЙ БИЛЕТ</h2>
+                <p>Электронный билет на поезд</p>
+                <p>Билет № <strong th:text="${ticket.id}">12345</strong></p>
+                <span class="status-badge" th:text="${ticket.status.name() == 'PAID'} ? 'ОПЛАЧЕН' : ${ticket.status.name()}">ОПЛАЧЕН</span>
+            </div>
+
+            <div class="route-info">
+                <div class="route-station">
+                    <div class="station-name" th:text="${ticket.fromStation.name}">Москва</div>
+                    <div class="station-time" th:text="${#temporals.format(booking.travelDateTime, 'dd.MM.yyyy HH:mm')}">01.04.2026 10:00</div>
+                </div>
+                <div class="route-arrow">➜</div>
+                <div class="route-station">
+                    <div class="station-name" th:text="${ticket.toStation.name}">Санкт-Петербург</div>
+                    <div class="station-time" th:text="${#temporals.format(booking.travelDateTime, 'dd.MM.yyyy HH:mm')}">01.04.2026 16:00</div>
+                </div>
+            </div>
+
+            <div class="ticket-body">
+                <div class="ticket-section">
+                    <h3>🚆 Информация о поезде</h3>
+                    <p><strong>Номер поезда:</strong> <span th:text="${ticket.train.trainNumber}">001А</span></p>
+                    <p><strong>Дата поездки:</strong> <span th:text="${#temporals.format(booking.travelDateTime, 'dd.MM.yyyy')}">01.04.2026</span></p>
+                    <p><strong>Время отправления:</strong> <span th:text="${#temporals.format(booking.travelDateTime, 'HH:mm')}">10:00</span></p>
+                </div>
+
+                <div class="ticket-section">
+                    <h3>👤 Пассажир</h3>
+                    <p><strong>ФИО:</strong> <span th:text="${booking.passengerName}">Иванов Иван Иванович</span></p>
+                    <p><strong>Email:</strong> <span th:text="${booking.email}">ivan@example.com</span></p>
+                </div>
+
+                <div class="ticket-section">
+                    <h3>🪑 Место</h3>
+                    <p><strong>Номер места:</strong> <span th:text="${ticket.seatNumber != null} ? ${ticket.seatNumber} : 'Будет назначено'">5-12</span></p>
+                    <p><strong>Вагон:</strong> <span th:text="${ticket.seatNumber != null} ? ${ticket.seatNumber.split('-')[0]} : 'Будет назначен'">5</span></p>
+                </div>
+
+                <div class="ticket-section">
+                    <h3>💰 Стоимость</h3>
+                    <p><strong>Цена билета:</strong> <span th:text="${ticket.price}">1500</span> руб.</p>
+                    <p><strong>Статус оплаты:</strong> <span style="color: #27ae60; font-weight: bold;">Оплачено</span></p>
+                </div>
+            </div>
+
+            <div class="ticket-section" style="margin-bottom: 15px;">
+                <h3>📋 Детали маршрута</h3>
+                <p><strong>Отправление:</strong> <span th:text="${ticket.fromStation.name}">Москва</span>, 
+                   <span th:text="${#temporals.format(booking.travelDateTime, 'dd.MM.yyyy HH:mm')}">01.04.2026 10:00</span></p>
+                <p><strong>Прибытие:</strong> <span th:text="${ticket.toStation.name}">Санкт-Петербург</span>, 
+                   <span th:text="${#temporals.format(booking.travelDateTime, 'dd.MM.yyyy HH:mm')}">01.04.2026 16:00</span></p>
+            </div>
+
+            <div class="qr-placeholder">
+                [QR CODE]
+            </div>
+
+            <div class="ticket-footer">
+                <p>✓ Билет подтверждён и оплачен</p>
+                <p>При посадке предъявите этот билет и документ, удостоверяющий личность</p>
+                <p>Сгенерировано: <span th:text="${#temporals.format(#temporals.createNow(), 'dd.MM.yyyy HH:mm')}">01.04.2026 09:00</span></p>
+            </div>
+        </div>
+
+        <div class="no-print" style="margin-top: 20px; text-align: center;">
+            <p style="color: #7f8c8d; font-size: 0.9rem;">
+                ℹ️ Сохраните этот билет или распечатайте его для предъявления при посадке.
+            </p>
+        </div>
+    </main>
+
+    <footer class="no-print">
+        <p>&copy; 2026 Система железнодорожная касса</p>
+    </footer>
+</body>
+</html>

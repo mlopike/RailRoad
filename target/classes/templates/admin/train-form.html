@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить поезд - Админ-панель</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🚂 Железнодорожная касса</h1>
+            <nav>
+                <span sec:authentication="name"></span>
+                <a th:href="@{/admin}">Главная</a>
+                <a th:href="@{/admin/trains}">Поезда</a>
+                <a th:href="@{/admin/stations}">Станции</a>
+                <a th:href="@{/admin/users}">Пользователи</a>
+                <a th:href="@{/admin/bookings}">Заявки</a>
+                <a th:href="@{/profile}">Профиль</a>
+                <form th:action="@{/auth/logout}" method="post" style="display:inline;">
+                    <button type="submit" class="btn-logout">Выход</button>
+                </form>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="card">
+            <h2>Добавить новый поезд</h2>
+            <div th:if="${error}" class="error-message" th:text="${error}"></div>
+            <form th:action="@{/admin/trains}" th:object="${train}" method="post">
+                <div class="form-group">
+                    <label for="trainNumber">Номер поезда:</label>
+                    <input type="text" id="trainNumber" th:field="*{trainNumber}" 
+                           placeholder="Например: 001А" required>
+                </div>
+                <div class="actions">
+                    <button type="submit" class="btn btn-success">Создать поезд</button>
+                    <a th:href="@{/admin/trains}" class="btn btn-secondary">Отмена</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Система железнодорожная касса</p>
+    </footer>
+</body>
+</html>

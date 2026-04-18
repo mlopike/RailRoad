@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заявка №<span th:text="${booking.id}"></span> - Железнодорожная касса</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🚂 Железнодорожная касса</h1>
+            <nav>
+                <span sec:authentication="name"></span>
+                <a th:href="@{/passenger}">Поиск рейсов</a>
+                <a th:href="@{/passenger/bookings}">Мои заявки</a>
+                <a th:href="@{/profile}">Профиль</a>
+                <form th:action="@{/auth/logout}" method="post" style="display:inline;">
+                    <button type="submit" class="btn-logout">Выход</button>
+                </form>
+                <a th:href="@{/admin}" sec:authorize="hasRole('ADMIN')">Админ-панель</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+        <div class="card">
+            <h2>Заявка №<span th:text="${booking.id}"></span></h2>
+            
+            <div class="grid-2">
+                <div>
+                    <p><strong>Пассажир:</strong> <span th:text="${booking.passengerName}">Иванов И.И.</span></p>
+                    <p><strong>Email:</strong> <span th:text="${booking.email}">ivan@example.com</span></p>
+                    <p><strong>Станция отправления:</strong> <span th:text="${booking.fromStation.name}">Москва</span></p>
+                    <p><strong>Станция назначения:</strong> <span th:text="${booking.toStation.name}">Санкт-Петербург</span></p>
+                    <p><strong>Дата и время поездки:</strong> 
+                       <span th:text="${#temporals.format(booking.travelDateTime, 'dd.MM.yyyy HH:mm')}">01.04.2026 10:00</span>
+                    </p>
+                </div>
+                <div>
+                    <p><strong>Статус:</strong> 
+                        <span class="badge" 
+                              th:classappend="${booking.status.name() == 'PENDING'} ? 'badge-pending' : 
+                                               (${booking.status.name() == 'TRAIN_SELECTED'} ? 'badge-train-selected' : 
+                                               (${booking.status.name() == 'PAID'} ? 'badge-paid' : 'badge-cancelled'))"
+                              th:text="${booking.status.name() == 'PENDING'} ? 'Ожидает' : 
+                                      (${booking.status.name() == 'TRAIN_SELECTED'} ? 'Поезд выбран' : 
+                                      (${booking.status.name() == 'PAID'} ? 'Оплачено' : 'Отменено'))">
+                            Ожидает
+                        </span>
+                    </p>
+                    <p th:if="${booking.selectedTrain != null}">
+                        <strong>Поезд:</strong> <span th:text="${booking.selectedTrain.trainNumber}">001А</span>
+                    </p>
+                    <p th:if="${booking.totalPrice != null}">
+                        <strong>Стоимость:</strong> <span th:text="${booking.totalPrice}">1500</span> руб.
+                    </p>
+                    <p><strong>Дата создания:</strong> 
+                       <span th:text="${#temporals.format(booking.createdAt, 'dd.MM.yyyy HH:mm')}">01.04.2026 09:00</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Оплата -->
+            <div th:if="${booking.status.name() == 'TRAIN_SELECTED'}" style="margin-top: 30px;">
+                <h3>Оплата счета</h3>
+                <div class="card" style="background: #f8f9fa;">
+                    <p><strong>Сумма к оплате:</strong> 
+                       <span style="font-size: 1.5rem; color: #28a745;" th:text="${booking.totalPrice}">1500</span> руб.
+                    </p>
+                    <p th:if="${booking.selectedTrain != null}">
+                        <strong>Поезд:</strong> <span th:text="${booking.selectedTrain.trainNumber}">001А</span>
+                    </p>
+                    <p><strong>Маршрут:</strong> 
+                       <span th:text="${booking.fromStation.name}">Москва</span> → 
+                       <span th:text="${booking.toStation.name}">Санкт-Петербург</span>
+                    </p>
+                    <p><strong>Дата поездки:</strong> 
+                       <span th:text="${#temporals.format(booking.travelDateTime, 'dd.MM.yyyy HH:mm')}">01.04.2026 10:00</span>
+                    </p>
+                    <form th:action="@{/passenger/bookings/{id}/pay(id=${booking.id})}" method="post" 
+                          style="margin-top: 20px;">
+                        <button type="submit" class="btn btn-success">Оплатить</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Билет -->
+            <div th:if="${booking.status.name() == 'PAID'}" style="margin-top: 30px;">
+                <h3 style="color: #28a745;">✓ Билет оплачен и сгенерирован</h3>
+                <div class="card" style="background: #d4edda; border: 2px solid #28a745;">
+                    <p><strong>Номер поезда:</strong> <span th:text="${booking.selectedTrain.trainNumber}">001А</span></p>
+                    <p><strong>Маршрут:</strong>
+                       <span th:text="${booking.fromStation.name}">Москва</span> →
+                       <span th:text="${booking.toStation.name}">Санкт-Петербург</span>
+                    </p>
+                    <p><strong>Дата поездки:</strong>
+                       <span th:text="${#temporals.format(booking.travelDateTime, 'dd.MM.yyyy HH:mm')}">01.04.2026 10:00</span>
+                    </p>
+                    <p><strong>Место:</strong> 
+                       <span th:if="${booking.tickets != null and !booking.tickets.isEmpty() and booking.tickets[0].seatNumber != null}" 
+                             th:text="${booking.tickets[0].seatNumber}">5-12</span>
+                       <span th:if="${booking.tickets == null or booking.tickets.isEmpty() or booking.tickets[0].seatNumber == null}">Будет назначено</span>
+                    </p>
+                    <div style="margin-top: 20px;">
+                        <a th:if="${booking.tickets != null and !booking.tickets.isEmpty()}" 
+                           th:href="@{/tickets/{id}(id=${booking.tickets[0].id})}" 
+                           class="btn btn-success">🎫 Просмотреть билет</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Кнопка отмены -->
+            <div th:if="${booking.status.name() == 'PENDING' or booking.status.name() == 'TRAIN_SELECTED'}" 
+                 style="margin-top: 30px;">
+                <form th:action="@{/passenger/bookings/{id}/cancel(id=${booking.id})}" method="post"
+                      style="display:inline;" onsubmit="return confirm('Вы уверены, что хотите отменить заявку?')">
+                    <button type="submit" class="btn btn-danger">Отменить заявку</button>
+                </form>
+            </div>
+        </div>
+
+        <a th:href="@{/passenger/bookings}" class="btn btn-secondary">Назад к списку</a>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Система железнодорожная касса</p>
+    </footer>
+</body>
+</html>
