@@ -19,14 +19,16 @@ public class UserRegistrationDto {
     @Email(message = "Некорректный email")
     private String email;
 
-    @NotBlank(message = "Номер телефона обязателен")
     @Pattern(regexp = "^\\+?[0-9]{10,15}$", message = "Номер телефона должен содержать от 10 до 15 цифр")
     private String phone;
 
     @NotBlank(message = "Роль обязательна")
     private String role;
 
-    public UserRegistrationDto() {}
+    public UserRegistrationDto() {
+        // Устанавливаем номер телефона по умолчанию в белорусском формате
+        this.phone = "";
+    }
 
     public String getUsername() {
         return username;

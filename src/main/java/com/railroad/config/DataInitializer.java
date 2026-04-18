@@ -34,9 +34,9 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        // Создаем пользователей по умолчанию
-        createUserIfNotExists("admin", "admin", "admin@railroad.ru", Role.ADMIN);
-        createUserIfNotExists("user", "user", "user@railroad.ru", Role.USER);
+        // Создаем пользователей по умолчанию с белорусскими номерами телефонов
+        createUserIfNotExists("admin", "admin", "admin@railroad.by", "+375291000001", Role.ADMIN);
+        createUserIfNotExists("user", "user", "user@railroad.by", "+375291000002", Role.USER);
 
         // Создаем станции
         Station moscow = createStation("Москва");
@@ -194,12 +194,13 @@ public class DataInitializer implements CommandLineRunner {
         routeStationRepository.save(routeStation);
     }
 
-    private void createUserIfNotExists(String username, String password, String email, Role role) {
+    private void createUserIfNotExists(String username, String password, String email, String phone, Role role) {
         if (!userRepository.existsByUsername(username)) {
             User user = new User();
             user.setUsername(username);
             user.setPassword(new BCryptPasswordEncoder().encode(password));
             user.setEmail(email);
+            user.setPhone(phone);
             user.setRole(role);
             user.setEnabled(true);
             userRepository.save(user);
