@@ -37,7 +37,7 @@ public class BookingService {
     @Autowired
     private TrainRepository trainRepository;
 
-    public Booking createBooking(String passengerName, String email,
+    public Booking createBooking(String passengerName, String email, String phone,
                                  Long fromStationId, Long toStationId,
                                  LocalDateTime travelDateTime) {
         Station fromStation = stationRepository.findById(fromStationId)
@@ -48,6 +48,7 @@ public class BookingService {
         Booking booking = new Booking();
         booking.setPassengerName(passengerName);
         booking.setEmail(email);
+        booking.setPhone(phone);
         booking.setFromStation(fromStation);
         booking.setToStation(toStation);
         booking.setTravelDateTime(travelDateTime);
@@ -56,7 +57,7 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
-    public Booking createBookingWithTrain(String passengerName, String email,
+    public Booking createBookingWithTrain(String passengerName, String email, String phone,
                                           Long fromStationId, Long toStationId,
                                           LocalDateTime travelDateTime, Long trainId) {
         Station fromStation = stationRepository.findById(fromStationId)
@@ -69,6 +70,7 @@ public class BookingService {
         Booking booking = new Booking();
         booking.setPassengerName(passengerName);
         booking.setEmail(email);
+        booking.setPhone(phone);
         booking.setFromStation(fromStation);
         booking.setToStation(toStation);
         booking.setTravelDateTime(travelDateTime);

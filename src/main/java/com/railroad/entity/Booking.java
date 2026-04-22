@@ -30,6 +30,10 @@ public class Booking {
     @Column(nullable = false)
     private String email;
 
+    @NotBlank(message = "Номер телефона обязателен")
+    @Column(nullable = false)
+    private String phone;
+
     /** Станция отправления */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "from_station_id", nullable = false)
@@ -98,6 +102,14 @@ public class Booking {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public Station getFromStation() {

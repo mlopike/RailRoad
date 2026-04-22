@@ -133,6 +133,7 @@ public class PassengerController {
         try {
             User user = userService.findByUsername(userDetails.getUsername()).orElse(null);
             String email = user != null ? user.getEmail() : userDetails.getUsername();
+            String phone = user != null ? user.getPhone() : "";
             
             // Используем текущую дату для поездки
             LocalDateTime travelDateTime = LocalDateTime.now().plusDays(1);
@@ -140,6 +141,7 @@ public class PassengerController {
             Booking created = bookingService.createBookingWithTrain(
                     passengerName,
                     email,
+                    phone,
                     fromStationId,
                     toStationId,
                     travelDateTime,

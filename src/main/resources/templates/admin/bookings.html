@@ -36,6 +36,7 @@
                         <th>ID</th>
                         <th>Пассажир</th>
                         <th>Email</th>
+                        <th>Телефон</th>
                         <th>Откуда</th>
                         <th>Куда</th>
                         <th>Дата поездки</th>
@@ -49,6 +50,7 @@
                         <td th:text="${booking.id}">1</td>
                         <td th:text="${booking.passengerName}">Иванов И.И.</td>
                         <td th:text="${booking.email}">ivan@example.com</td>
+                        <td th:text="${booking.phone}">+7 (999) 000-00-00</td>
                         <td th:text="${booking.fromStation.name}">Москва</td>
                         <td th:text="${booking.toStation.name}">Санкт-Петербург</td>
                         <td th:text="${#temporals.format(booking.travelDateTime, 'dd.MM.yyyy HH:mm')}">01.04.2026 10:00</td>
@@ -67,7 +69,7 @@
                         <td th:text="${booking.totalPrice != null} ? ${booking.totalPrice} : '-'">1500</td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(bookings)}">
-                        <td colspan="9" style="text-align:center;">Заявок пока нет</td>
+                        <td colspan="10" style="text-align:center;">Заявок пока нет</td>
                     </tr>
                 </tbody>
             </table>
